@@ -1,0 +1,109 @@
+/* Base & Tipografía */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #08080A;
+  color: #A1A1AA;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Fondo Hero con Overlay */
+.hero-bg-campus {
+  background: 
+    linear-gradient(180deg, rgba(8, 8, 10, 0.75) 0%, rgba(8, 8, 10, 0.88) 60%, rgba(8, 8, 10, 1) 100%),
+    url('https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+}
+
+/* Glassmorphism */
+.glass-card {
+  background: rgba(18, 18, 24, 0.75);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+.glass-card:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15);
+}
+
+/* Backdrop para Modales (Previene conflictos hidden/flex) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Helpers 3D */
+.preserve-3d {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+.translate-z-20 {
+  transform: translateZ(35px);
+}
+
+/* Swiper 3D Slides Dimensionados */
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 320px;
+  height: 440px;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .swiper-slide {
+    width: 380px;
+    height: 520px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .swiper-slide {
+    width: 440px;
+    height: 580px;
+  }
+}
+
+.swiper-3d .swiper-slide-shadow-left,
+.swiper-3d .swiper-slide-shadow-right {
+  background-image: none;
+}
+
+/* Scrollbar Personalizado */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #08080A;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F59E0B;
+}
+#three-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 20 !important;
+  pointer-events: none !important;
+  display: block !important;
+}

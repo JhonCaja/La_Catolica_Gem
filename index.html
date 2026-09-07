@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colegio & Comunidad Educativa | Excelencia e Innovación</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Librerías de terceros (CSS) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Estilos Propios -->
+  <link rel="stylesheet" href="styles.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#F59E0B',
+              goldHover: '#D97706',
+              dark: '#08080A',
+              card: 'rgba(255, 255, 255, 0.03)',
+              border: 'rgba(255, 255, 255, 0.08)'
+            }
+          },
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="selection:bg-brand-gold selection:text-black relative">
+
+  <!-- Canvas Three.js -->
+<!-- Cambiar z-10 por z-20 -->
+<canvas id="three-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-25"></canvas>
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 w-full z-50 glass-card !border-t-0 !border-x-0 !rounded-none py-4 px-6 md:px-12 2xl:px-24 flex items-center justify-between transition-all duration-300">
+   <a href="#" class="flex items-center gap-3 text-xl 2xl:text-2xl font-extrabold uppercase tracking-widest text-white font-heading group">
+      <!-- LOGO IMAGEN -->
+      <img 
+        src="imagenes/logo.png" 
+        alt="Logo La Católica GEM" 
+        class="w-12 h-12 2xl:w-10 2xl:h-10 object-contain rounded-full border border-amber-400/40 p-0.5 group-hover:scale-105 transition-transform duration-200"
+      >
+      <!-- TEXTO Y PUNTO ANIMADO -->
+      <span class="flex items-center gap-2">
+        LA CATOLICA GEM<span class="w-2.5 h-2.5 rounded-full bg-brand-gold animate-pulse"></span>
+      </span>
+    </a>
+
+    <!-- Botón Móvil -->
+    <button id="menu-toggle" class="xl:hidden text-gray-300 hover:text-brand-gold focus:outline-none text-2xl" aria-label="Abrir menú">
+      <i class="fa-solid fa-bars-staggered"></i>
+    </button>
+
+    <!-- Menú Escritorio -->
+    <nav class="hidden xl:flex items-center space-x-6 2xl:space-x-8 text-xs lg:text-sm font-bold uppercase tracking-wider text-gray-300 font-heading">
+      <a href="#hero" class="hover:text-brand-gold transition-colors">Inicio</a>
+      <a href="#portfolio" class="hover:text-brand-gold transition-colors">Propuesta 3D</a>
+      <a href="#gallery" class="hover:text-brand-gold transition-colors">Instalaciones</a>
+      <a href="#about" class="hover:text-brand-gold transition-colors">Docentes</a>
+      <a href="#contact" class="hover:text-brand-gold transition-colors">Admisión</a>
+    </nav>
+
+    <!-- Botones de Acción -->
+    <div class="hidden xl:flex items-center space-x-4">
+      <div class="flex items-center space-x-3 text-gray-400 text-base pr-3 border-r border-white/10">
+        <a href="#" class="hover:text-brand-gold transition" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-brand-gold transition" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="hover:text-brand-gold transition" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+
+      <!-- Botón 1: Notas -->
+      <button onclick="openModal('modal-estudiante')" class="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition-all hover:scale-105 active:scale-95 cursor-pointer">
+        <i class="fa-solid fa-graduation-cap text-sm"></i>
+        <span>Consulta Notas</span>
+      </button>
+
+      <!-- Botón 2: Administración -->
+      <button onclick="openModal('modal-admin-auth')" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider backdrop-blur-md transition-all hover:border-amber-400/50 cursor-pointer">
+        <i class="fa-solid fa-lock text-xs text-amber-400"></i>
+        <span>Administración</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MENÚ MÓVIL -->
+  <div id="mobile-menu" class="hidden fixed top-[65px] left-0 w-full glass-card !rounded-none z-40 px-6 py-6 space-y-4 text-sm font-bold uppercase tracking-wider text-gray-300 xl:hidden border-b border-white/10 font-heading bg-slate-950/95 backdrop-blur-xl">
+    <a href="#hero" class="block hover:text-brand-gold py-1">Inicio</a>
+    <a href="#portfolio" class="block hover:text-brand-gold py-1">Propuesta 3D</a>
+    <a href="#gallery" class="block hover:text-brand-gold py-1">Instalaciones</a>
+    <a href="#about" class="block hover:text-brand-gold py-1">Docentes</a>
+    <a href="#contact" class="block hover:text-brand-gold py-1">Admisión</a>
+
+    <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
+      <button onclick="openModal('modal-estudiante')" class="w-full flex items-center justify-center gap-2 bg-amber-500 text-slate-950 font-bold py-2.5 rounded-lg text-xs tracking-wider cursor-pointer">
+        <i class="fa-solid fa-graduation-cap"></i> Consulta de Notas
+      </button>
+      <button onclick="openModal('modal-admin-auth')" class="w-full flex items-center justify-center gap-2 bg-white/10 text-white border border-white/20 font-bold py-2.5 rounded-lg text-xs tracking-wider cursor-pointer">
+        <i class="fa-solid fa-lock text-amber-400"></i> Panel Administrativo
+      </button>
+    </div>
+  </div>
+
+  <!-- SECCIÓN HERO -->
+  <section id="hero" class="hero-bg-campus min-h-screen flex flex-col justify-between items-center text-center px-6 lg:px-12 pt-32 pb-12 relative overflow-hidden">
+    <div></div>
+    <div class="max-w-5xl 2xl:max-w-7xl mx-auto space-y-8 2xl:space-y-12 relative z-30" data-aos="fade-up" data-aos-duration="1000">
+      <div class="inline-flex items-center gap-3 px-6 py-2.5 rounded-full glass-card text-xs sm:text-sm 2xl:text-base font-bold text-brand-gold uppercase tracking-widest font-heading shadow-lg">
+        <span class="w-2.5 h-2.5 rounded-full bg-brand-gold"></span> Admisiones Abiertas 2026 - 2027
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-extrabold text-white leading-tight lg:leading-[1.15] 2xl:leading-[1.1] tracking-tight uppercase font-heading drop-shadow-2xl">
+        Formando Líderes con <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-brand-gold to-amber-500">Valores y Tecnología</span>
+      </h1>
+
+      <p class="text-gray-200 text-base sm:text-xl 2xl:text-2xl max-w-3xl 2xl:max-w-4xl mx-auto font-normal leading-relaxed 2xl:leading-loose drop-shadow-md">
+        Educación integral de alto nivel en Inicial, Primaria y Secundaria. Fomentamos el pensamiento crítico, la ciencia, el deporte y el arte en un campus moderno.
+      </p>
+
+      <div class="pt-4 flex flex-wrap justify-center gap-6">
+        <a href="#gallery" class="px-10 py-4 2xl:px-14 2xl:py-5 bg-gradient-to-r from-brand-gold to-brand-goldHover text-black text-sm lg:text-base 2xl:text-lg font-extrabold uppercase tracking-widest rounded-xl hover:shadow-[0_0_35px_rgba(245,158,11,0.6)] hover:scale-105 transition-all duration-300 font-heading">
+          Ver Instalaciones
+        </a>
+        <a href="#contact" class="px-10 py-4 2xl:px-14 2xl:py-5 glass-card text-white hover:text-brand-gold text-sm lg:text-base 2xl:text-lg font-extrabold uppercase tracking-widest rounded-xl hover:scale-105 transition-all duration-300 font-heading">
+          Proceso de Admisión
+        </a>
+      </div>
+    </div>
+
+    <a href="#portfolio" class="z-20 text-gray-400 hover:text-brand-gold text-xs 2xl:text-sm font-bold uppercase tracking-widest flex flex-col items-center gap-2 transition duration-300 font-heading">
+      <span>DESCUBRIR</span>
+      <i class="fa-solid fa-chevron-down animate-bounce text-base"></i>
+    </a>
+  </section>
+
+  <!-- SECCIÓN NIVELES / PORTFOLIO -->
+  <section id="portfolio" class="py-32 2xl:py-44 px-6 lg:px-12 relative overflow-hidden z-20">
+    <div class="max-w-7xl 2xl:max-w-8xl mx-auto">
+      <div class="text-center max-w-3xl 2xl:max-w-4xl mx-auto mb-16 2xl:mb-24" data-aos="fade-up">
+        <h2 class="text-3xl sm:text-5xl 2xl:text-6xl font-extrabold text-white tracking-tight uppercase font-heading">
+          Niveles & <span class="text-brand-gold">Talleres</span>
+        </h2>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-brand-gold to-amber-600 mx-auto my-6 rounded-full"></div>
+        <p class="text-gray-300 text-base sm:text-lg 2xl:text-xl leading-relaxed">
+          Explora en nuestro carrusel interactivo los niveles educativos y programas extracurriculares que ofrecemos.
+        </p>
+      </div>
+
+      <div class="swiper mySwiper py-12" data-aos="zoom-in" data-aos-duration="1000">
+        <div class="swiper-wrapper">
+          <!-- Slide Inicial -->
+          <div class="swiper-slide glass-card preserve-3d group cursor-pointer relative" data-tilt data-tilt-max="10" data-tilt-speed="400">
+            <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=1000&q=80" alt="Nivel Inicial" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500 opacity-85 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 2xl:p-10 flex flex-col justify-end translate-z-20">
+              <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider font-heading">Edades 3 a 5 años</span>
+              <h4 class="text-2xl 2xl:text-3xl font-extrabold text-white uppercase mt-2 font-heading">Nivel Inicial</h4>
+              <p class="text-sm 2xl:text-base text-gray-200 mt-2 font-normal leading-relaxed">Desarrollo sensorial, psicomotriz y social mediante metodologías activas y lúdicas.</p>
+            </div>
+          </div>
+
+          <!-- Slide Primaria -->
+          <div class="swiper-slide glass-card preserve-3d group cursor-pointer relative" data-tilt data-tilt-max="10" data-tilt-speed="400">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=80" alt="Nivel Primaria" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500 opacity-85 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 2xl:p-10 flex flex-col justify-end translate-z-20">
+              <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider font-heading">1° a 6° Grado</span>
+              <h4 class="text-2xl 2xl:text-3xl font-extrabold text-white uppercase mt-2 font-heading">Nivel Primaria</h4>
+              <p class="text-sm 2xl:text-base text-gray-200 mt-2 font-normal leading-relaxed">Consolidación de competencias matemáticas, lingüísticas, bilingüismo y trabajo cooperativo.</p>
+            </div>
+          </div>
+
+          <!-- Slide Secundaria -->
+          <div class="swiper-slide glass-card preserve-3d group cursor-pointer relative" data-tilt data-tilt-max="10" data-tilt-speed="400">
+            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80" alt="Nivel Secundaria" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500 opacity-85 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 2xl:p-10 flex flex-col justify-end translate-z-20">
+              <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider font-heading">1° a 5° Año</span>
+              <h4 class="text-2xl 2xl:text-3xl font-extrabold text-white uppercase mt-2 font-heading">Nivel Secundaria</h4>
+              <p class="text-sm 2xl:text-base text-gray-200 mt-2 font-normal leading-relaxed">Preparación preuniversitaria rigurosa, orientación vocacional y pensamiento analítico.</p>
+            </div>
+          </div>
+
+          <!-- Slide Robótica -->
+          <div class="swiper-slide glass-card preserve-3d group cursor-pointer relative" data-tilt data-tilt-max="10" data-tilt-speed="400">
+            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80" alt="Robótica y STEM" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500 opacity-85 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 2xl:p-10 flex flex-col justify-end translate-z-20">
+              <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider font-heading">Extracurricular</span>
+              <h4 class="text-2xl 2xl:text-3xl font-extrabold text-white uppercase mt-2 font-heading">Robótica & STEM</h4>
+              <p class="text-sm 2xl:text-base text-gray-200 mt-2 font-normal leading-relaxed">Laboratorios de programación, diseño 3D y robótica educativa desde temprana edad.</p>
+            </div>
+          </div>
+
+          <!-- Slide Deportes y Arte -->
+          <div class="swiper-slide glass-card preserve-3d group cursor-pointer relative" data-tilt data-tilt-max="10" data-tilt-speed="400">
+            <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1000&q=80" alt="Deportes y Arte" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500 opacity-85 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 2xl:p-10 flex flex-col justify-end translate-z-20">
+              <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider font-heading">Formación Integral</span>
+              <h4 class="text-2xl 2xl:text-3xl font-extrabold text-white uppercase mt-2 font-heading">Deporte & Artes</h4>
+              <p class="text-sm 2xl:text-base text-gray-200 mt-2 font-normal leading-relaxed">Selecciones deportivas de fútbol, vóley, básquetbol, orquesta y elenco de teatro.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination !bottom-0"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN INSTALACIONES -->
+  <section id="gallery" class="py-32 2xl:py-44 px-6 lg:px-12 bg-[#0A0A0D] relative border-y border-white/5 z-20">
+    <div class="max-w-7xl 2xl:max-w-8xl mx-auto">
+      <div class="text-center max-w-3xl 2xl:max-w-4xl mx-auto mb-20 2xl:mb-28" data-aos="fade-up">
+        <h2 class="text-3xl sm:text-5xl 2xl:text-6xl font-extrabold text-white tracking-tight uppercase font-heading">
+          Nuestras <span class="text-brand-gold">Instalaciones</span>
+        </h2>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-brand-gold to-amber-600 mx-auto my-6 rounded-full"></div>
+        <p class="text-gray-300 text-base sm:text-lg 2xl:text-xl leading-relaxed">
+          Infraestructura moderna, segura y equipada con tecnología de punta para el aprendizaje y esparcimiento.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 2xl:gap-10">
+        <!-- Card 1 -->
+        <div class="glass-card overflow-hidden rounded-3xl group cursor-pointer relative" data-aos="fade-up" data-aos-delay="100">
+          <div class="h-72 2xl:h-80 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80" alt="Aulas Modernas" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <span class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-brand-gold border border-brand-gold/30 px-3 py-1 rounded-full text-xs font-bold uppercase font-heading">Multimedia</span>
+          </div>
+          <div class="p-6 2xl:p-8">
+            <h3 class="text-xl 2xl:text-2xl font-bold text-white uppercase font-heading">Aulas Digitales</h3>
+            <p class="text-gray-300 text-sm 2xl:text-base mt-2">Pizarras interactivas, climatización y espacios diseñados para la concentración.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card overflow-hidden rounded-3xl group cursor-pointer relative" data-aos="fade-up" data-aos-delay="200">
+          <div class="h-72 2xl:h-80 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80" alt="Laboratorio de Ciencias" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <span class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-brand-gold border border-brand-gold/30 px-3 py-1 rounded-full text-xs font-bold uppercase font-heading">Ciencias</span>
+          </div>
+          <div class="p-6 2xl:p-8">
+            <h3 class="text-xl 2xl:text-2xl font-bold text-white uppercase font-heading">Laboratorio de Ciencias</h3>
+            <p class="text-gray-300 text-sm 2xl:text-base mt-2">Equipamiento completo para física, química y biología con estrictas normas de seguridad.</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card overflow-hidden rounded-3xl group cursor-pointer relative" data-aos="fade-up" data-aos-delay="300">
+          <div class="h-72 2xl:h-80 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80" alt="Biblioteca y Estudio" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <span class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-brand-gold border border-brand-gold/30 px-3 py-1 rounded-full text-xs font-bold uppercase font-heading">Investigación</span>
+          </div>
+          <div class="p-6 2xl:p-8">
+            <h3 class="text-xl 2xl:text-2xl font-bold text-white uppercase font-heading">Biblioteca & Sala Virtual</h3>
+            <p class="text-gray-300 text-sm 2xl:text-base mt-2">Colección física de miles de ejemplares y acceso a plataformas virtuales de investigación.</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card overflow-hidden rounded-3xl group cursor-pointer relative" data-aos="fade-up" data-aos-delay="100">
+          <div class="h-72 2xl:h-80 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" alt="Complejo Deportivo" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <span class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-brand-gold border border-brand-gold/30 px-3 py-1 rounded-full text-xs font-bold uppercase font-heading">Deportes</span>
+          </div>
+          <div class="p-6 2xl:p-8">
+            <h3 class="text-xl 2xl:text-2xl font-bold text-white uppercase font-heading">Polideportivo Techado</h3>
+            <p class="text-gray-300 text-sm 2xl:text-base mt-2">Canchas reglamentarias multifuncionales, vestuarios y graderías para eventos intercolegiales.</p>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card overflow-hidden rounded-3xl group cursor-pointer relative" data-aos="fade-up" data-aos-delay="200">
+          <div class="h-72 2xl:h-80 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Laboratorio de Robótica" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <span class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-brand-gold border border-brand-gold/30 px-3 py-1 rounded-full text-xs font-bold uppercase font-heading">Robótica</span>
+          </div>
+          <div class="p-6 2xl:p-8">
+            <h3 class="text-xl 2xl:text-2xl font-bold text-white uppercase font-heading">Centro de Cómputo & Robótica</h3>
+            <p class="text-gray-300 text-sm 2xl:text-base mt-2">Estaciones de trabajo de última generación, kits de electrónica y software educativo.</p>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card overflow-hidden rounded-3xl group cursor-pointer relative" data-aos="fade-up" data-aos-delay="300">
+          <div class="h-72 2xl:h-80 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80" alt="Auditorio" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <span class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-brand-gold border border-brand-gold/30 px-3 py-1 rounded-full text-xs font-bold uppercase font-heading">Arte & Cultura</span>
+          </div>
+          <div class="p-6 2xl:p-8">
+            <h3 class="text-xl 2xl:text-2xl font-bold text-white uppercase font-heading">Auditorio Principal</h3>
+            <p class="text-gray-300 text-sm 2xl:text-base mt-2">Espacio acústico para conferencias, presentaciones teatrales, danzas y asambleas escolares.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN DOCENTES & PROPUESTA -->
+  <section id="about" class="py-32 2xl:py-44 px-6 lg:px-12 relative z-20">
+    <div class="max-w-7xl 2xl:max-w-8xl mx-auto space-y-28 2xl:space-y-36">
+      <div>
+        <div class="text-center max-w-3xl 2xl:max-w-4xl mx-auto mb-20" data-aos="fade-up">
+          <h2 class="text-3xl sm:text-5xl 2xl:text-6xl font-extrabold text-white tracking-tight uppercase font-heading">
+            Nuestra <span class="text-brand-gold">Propuesta</span>
+          </h2>
+          <div class="w-20 h-1.5 bg-gradient-to-r from-brand-gold to-amber-600 mx-auto my-6 rounded-full"></div>
+          <p class="text-gray-300 text-base sm:text-lg 2xl:text-xl leading-relaxed">
+            Basamos nuestro modelo educativo en 4 pilares fundamentales para el éxito de cada estudiante.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 2xl:gap-10">
+          <div class="glass-card p-8 2xl:p-12 rounded-2xl" data-aos="fade-right">
+            <h3 class="text-xl sm:text-2xl 2xl:text-3xl font-extrabold text-white uppercase flex items-center gap-4 font-heading">
+              <i class="fa-solid fa-graduation-cap text-brand-gold"></i> Excelencia Académica
+            </h3>
+            <p class="text-gray-300 text-base 2xl:text-lg mt-4 leading-relaxed">
+              Programas curriculares avanzados, evaluaciones continuas y metodología orientada a resultados preuniversitarios.
+            </p>
+          </div>
+
+          <div class="glass-card p-8 2xl:p-12 rounded-2xl" data-aos="fade-left">
+            <h3 class="text-xl sm:text-2xl 2xl:text-3xl font-extrabold text-white uppercase flex items-center gap-4 font-heading">
+              <i class="fa-solid fa-heart text-brand-gold"></i> Formación en Valores
+            </h3>
+            <p class="text-gray-300 text-base 2xl:text-lg mt-4 leading-relaxed">
+              Enseñanza basada en el respeto, la disciplina positiva, la empatía y la responsabilidad ciudadana.
+            </p>
+          </div>
+
+          <div class="glass-card p-8 2xl:p-12 rounded-2xl" data-aos="fade-right" data-aos-delay="100">
+            <h3 class="text-xl sm:text-2xl 2xl:text-3xl font-extrabold text-white uppercase flex items-center gap-4 font-heading">
+              <i class="fa-solid fa-language text-brand-gold"></i> Programa Bilingüe
+            </h3>
+            <p class="text-gray-300 text-base 2xl:text-lg mt-4 leading-relaxed">
+              Inmersión temprana en el idioma inglés con certificaciones internacionales progresivas.
+            </p>
+          </div>
+
+          <div class="glass-card p-8 2xl:p-12 rounded-2xl" data-aos="fade-left" data-aos-delay="100">
+            <h3 class="text-xl sm:text-2xl 2xl:text-3xl font-extrabold text-white uppercase flex items-center gap-4 font-heading">
+              <i class="fa-solid fa-microchip text-brand-gold"></i> Aulas Tecnológicas
+            </h3>
+            <p class="text-gray-300 text-base 2xl:text-lg mt-4 leading-relaxed">
+              Plataformas virtuales de seguimiento escolar, talleres de robótica y pensamiento computacional.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plana Docente -->
+      <div>
+        <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+          <h2 class="text-3xl sm:text-4xl 2xl:text-5xl font-extrabold text-white tracking-tight uppercase font-heading">
+            Plana <span class="text-brand-gold">Docente</span>
+          </h2>
+          <div class="w-16 h-1.5 bg-gradient-to-r from-brand-gold to-amber-600 mx-auto my-4 rounded-full"></div>
+          <p class="text-gray-300 text-base sm:text-lg">
+            Profesionales altamente calificados con vocación de servicio y constante actualización pedagógica.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="glass-card p-8 rounded-3xl text-center group" data-tilt data-tilt-max="10" data-aos="fade-up" data-aos-delay="100">
+            <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=500&q=80" alt="Profesor" class="w-32 h-32 2xl:w-40 2xl:h-40 mx-auto rounded-full object-cover border-2 border-brand-gold/40 group-hover:border-brand-gold transition duration-300">
+            <h4 class="text-lg sm:text-xl 2xl:text-2xl font-extrabold text-white uppercase mt-6 font-heading">Lic. Marco Mendoza</h4>
+            <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider block mt-1 font-heading">Coordinador de Ciencias</span>
+            <p class="text-sm 2xl:text-base text-gray-300 mt-3 font-normal leading-relaxed">Especialista en Física y Matemáticas Avanzadas con más de 12 años de experiencia formativa.</p>
+          </div>
+
+          <div class="glass-card p-8 rounded-3xl text-center group" data-tilt data-tilt-max="10" data-aos="fade-up" data-aos-delay="200">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80" alt="Profesora" class="w-32 h-32 2xl:w-40 2xl:h-40 mx-auto rounded-full object-cover border-2 border-brand-gold/40 group-hover:border-brand-gold transition duration-300">
+            <h4 class="text-lg sm:text-xl 2xl:text-2xl font-extrabold text-white uppercase mt-6 font-heading">Mg. Patricia Suárez</h4>
+            <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider block mt-1 font-heading">Lenguaje & Literatura</span>
+            <p class="text-sm 2xl:text-base text-gray-300 mt-3 font-normal leading-relaxed">Magíster en Educación, promotora del plan lector y competencias de debate y oratoria.</p>
+          </div>
+
+          <div class="glass-card p-8 rounded-3xl text-center group" data-tilt data-tilt-max="10" data-aos="fade-up" data-aos-delay="300">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=500&q=80" alt="Profesor" class="w-32 h-32 2xl:w-40 2xl:h-40 mx-auto rounded-full object-cover border-2 border-brand-gold/40 group-hover:border-brand-gold transition duration-300">
+            <h4 class="text-lg sm:text-xl 2xl:text-2xl font-extrabold text-white uppercase mt-6 font-heading">Ing. Roberto Carranza</h4>
+            <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider block mt-1 font-heading">Robótica & Computación</span>
+            <p class="text-sm 2xl:text-base text-gray-300 mt-3 font-normal leading-relaxed">Ingeniero de Sistemas y mentor en torneos escolares de programación y circuitos.</p>
+          </div>
+
+          <div class="glass-card p-8 rounded-3xl text-center group" data-tilt data-tilt-max="10" data-aos="fade-up" data-aos-delay="400">
+            <img src="https://images.unsplash.com/photo-1580894732470-394ff0397573?auto=format&fit=crop&w=500&q=80" alt="Profesora" class="w-32 h-32 2xl:w-40 2xl:h-40 mx-auto rounded-full object-cover border-2 border-brand-gold/40 group-hover:border-brand-gold transition duration-300">
+            <h4 class="text-lg sm:text-xl 2xl:text-2xl font-extrabold text-white uppercase mt-6 font-heading">Lic. Andrea Paredes</h4>
+            <span class="text-xs sm:text-sm 2xl:text-base text-brand-gold font-bold uppercase tracking-wider block mt-1 font-heading">Inglés & Bilingüismo</span>
+            <p class="text-sm 2xl:text-base text-gray-300 mt-3 font-normal leading-relaxed">Certificada internacionalmente, encargada del programa bilingüe y certificaciones de Cambridge.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA MATRÍCULA -->
+  <section class="py-28 2xl:py-36 px-6 lg:px-12 relative overflow-hidden bg-gradient-to-b from-[#08080A] via-[#101015] to-[#08080A] z-20">
+    <div class="max-w-5xl 2xl:max-w-6xl mx-auto glass-card p-12 md:p-20 rounded-3xl text-center relative border border-brand-gold/25" data-aos="zoom-in">
+      <h2 class="text-3xl sm:text-5xl 2xl:text-6xl font-extrabold text-white uppercase tracking-tight font-heading">
+        ¿Deseas postular a una vacante escolar?
+      </h2>
+      <p class="text-gray-200 text-base sm:text-xl 2xl:text-2xl max-w-2xl 2xl:max-w-3xl mx-auto mt-6 leading-relaxed">
+        Separa una visita guiada para conocer el campus o inicia en línea el proceso de postulación y matrícula.
+      </p>
+      <div class="mt-10">
+        <a href="#contact" class="inline-block px-12 py-5 2xl:px-16 2xl:py-6 bg-gradient-to-r from-brand-gold to-amber-600 text-black text-sm lg:text-base 2xl:text-lg font-extrabold uppercase tracking-widest rounded-2xl hover:shadow-[0_0_35px_rgba(245,158,11,0.6)] hover:scale-105 transition-all duration-300 font-heading">
+          Solicitar Información de Matrícula
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN ADMISIÓN / CONTACTO -->
+  <section id="contact" class="py-32 2xl:py-44 px-6 lg:px-12 relative z-20">
+    <div class="max-w-7xl 2xl:max-w-8xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-20" data-aos="fade-up">
+        <h2 class="text-3xl sm:text-5xl 2xl:text-6xl font-extrabold text-white tracking-tight uppercase font-heading">
+          Oficina de <span class="text-brand-gold">Admisión</span>
+        </h2>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-brand-gold to-amber-600 mx-auto my-6 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 2xl:gap-16 items-stretch">
+        <div class="md:col-span-7 glass-card p-8 sm:p-12 2xl:p-16 rounded-3xl" data-aos="fade-right">
+          <form id="admisionForm" class="space-y-6">
+            <div>
+              <label class="block text-xs sm:text-sm 2xl:text-base font-bold text-gray-300 uppercase tracking-wider mb-3 font-heading">Nombre del Padre / Apoderado</label>
+              <input type="text" id="nombreApoderado" required class="w-full bg-white/5 border border-white/15 rounded-xl p-4 sm:p-5 text-base sm:text-lg text-white focus:outline-none focus:border-brand-gold transition" placeholder="Ej: Juan Pérez">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs sm:text-sm 2xl:text-base font-bold text-gray-300 uppercase tracking-wider mb-3 font-heading">Correo Electrónico</label>
+                <input type="email" id="emailApoderado" required class="w-full bg-white/5 border border-white/15 rounded-xl p-4 sm:p-5 text-base sm:text-lg text-white focus:outline-none focus:border-brand-gold transition" placeholder="juan@correo.com">
+              </div>
+              <div>
+                <label class="block text-xs sm:text-sm 2xl:text-base font-bold text-gray-300 uppercase tracking-wider mb-3 font-heading">Teléfono / Celular</label>
+                <input type="tel" id="telefonoApoderado" required class="w-full bg-white/5 border border-white/15 rounded-xl p-4 sm:p-5 text-base sm:text-lg text-white focus:outline-none focus:border-brand-gold transition" placeholder="987654321">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs sm:text-sm 2xl:text-base font-bold text-gray-300 uppercase tracking-wider mb-3 font-heading">Nivel de Interés</label>
+              <input type="text" id="nivelInteres" placeholder="Ej: Primaria - 4to Grado" required class="w-full bg-white/5 border border-white/15 rounded-xl p-4 sm:p-5 text-base sm:text-lg text-white focus:outline-none focus:border-brand-gold transition">
+            </div>
+
+            <div>
+              <label class="block text-xs sm:text-sm 2xl:text-base font-bold text-gray-300 uppercase tracking-wider mb-3 font-heading">Consulta o Mensaje</label>
+              <textarea id="mensajeApoderado" rows="4" placeholder="Escribe aquí tus dudas sobre vacantes, costos o visitas..." required class="w-full bg-white/5 border border-white/15 rounded-xl p-4 sm:p-5 text-base sm:text-lg text-white focus:outline-none focus:border-brand-gold transition"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-5 bg-gradient-to-r from-brand-gold to-brand-goldHover text-black text-sm sm:text-base 2xl:text-lg font-extrabold uppercase tracking-widest rounded-xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] hover:scale-[1.01] flex items-center justify-center gap-3 font-heading cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-xl"></i> Enviar Solicitud por WhatsApp
+            </button>
+          </form>
+        </div>
+
+        <div class="md:col-span-5 flex flex-col justify-between space-y-8" data-aos="fade-left">
+          <div class="glass-card p-8 sm:p-12 2xl:p-16 rounded-3xl space-y-8">
+            <h3 class="text-2xl 2xl:text-3xl font-extrabold text-white uppercase tracking-wide font-heading">Atención y Visitas</h3>
+            <p class="text-gray-300 text-base 2xl:text-lg leading-relaxed">
+              Te invitamos a coordinar una cita para conocer el campus educativo y recibir asesoría personalizada sobre el proceso de postulación.
+            </p>
+
+            <div class="space-y-6 text-base 2xl:text-lg text-gray-200">
+              <div class="flex items-center gap-5">
+                <div class="w-12 h-12 2xl:w-14 2xl:h-14 rounded-xl bg-white/5 flex items-center justify-center text-brand-gold text-xl 2xl:text-2xl shrink-0">
+                  <i class="fa-solid fa-school"></i>
+                </div>
+                <span>Av. Los Educadores 450, Lima - Perú</span>
+              </div>
+              <div class="flex items-center gap-5">
+                <div class="w-12 h-12 2xl:w-14 2xl:h-14 rounded-xl bg-white/5 flex items-center justify-center text-brand-gold text-xl 2xl:text-2xl shrink-0">
+                  <i class="fa-solid fa-envelope"></i>
+                </div>
+                <span>admision@colegio.edu.pe</span>
+              </div>
+              <div class="flex items-center gap-5">
+                <div class="w-12 h-12 2xl:w-14 2xl:h-14 rounded-xl bg-white/5 flex items-center justify-center text-brand-gold text-xl 2xl:text-2xl shrink-0">
+                  <i class="fa-solid fa-phone"></i>
+                </div>
+                <span>+51 (01) 555-4321 / +51 987 111 222</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-8 2xl:p-10 rounded-3xl">
+            <h4 class="text-xs sm:text-sm 2xl:text-base font-bold text-brand-gold uppercase tracking-wider mb-2 font-heading">Horario de Secretaría</h4>
+            <p class="text-base 2xl:text-lg text-gray-200 font-medium">Lunes a Viernes: 07:30 AM - 04:30 PM (PET)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-black text-gray-400 py-16 2xl:py-24 px-6 border-t border-white/10 text-center relative z-20">
+    <div class="max-w-4xl 2xl:max-w-5xl mx-auto space-y-8">
+      <div class="flex justify-center space-x-8 text-xl 2xl:text-2xl text-gray-400">
+        <a href="#" class="hover:text-brand-gold transition" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-brand-gold transition" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="hover:text-brand-gold transition" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+
+      <p class="text-sm 2xl:text-base max-w-xl mx-auto leading-relaxed text-gray-300">
+        Comunidad Educativa comprometida con la excelencia pedagógica, la innovación y el desarrollo integral de los estudiantes.
+      </p>
+
+      <p class="text-xs 2xl:text-sm text-gray-500 font-heading">&copy; 2026 Colegio & Comunidad Educativa. Todos los derechos reservados.</p>
+
+      <div class="pt-4">
+        <a href="#hero" class="text-xs sm:text-sm 2xl:text-base font-extrabold uppercase tracking-widest text-gray-400 hover:text-brand-gold inline-flex items-center gap-3 transition font-heading">
+          Volver Arriba <i class="fa-solid fa-arrow-up"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALES ================= -->
+
+  <!-- Modal 1: Consulta Estudiante -->
+  <div id="modal-estudiante" style="display: none;" class="modal-backdrop">
+    <div class="bg-slate-900 border border-white/10 rounded-2xl max-w-md w-full p-6 text-white relative shadow-2xl">
+      <button onclick="closeModal('modal-estudiante')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕</button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl">
+          <i class="fa-solid fa-id-card-clip"></i>
+        </div>
+        <h3 class="text-xl font-bold font-heading">Portal de Calificaciones</h3>
+        <p class="text-xs text-gray-400 mt-1">Ingresa el código único del estudiante para descargar la libreta</p>
+      </div>
+
+      <form onsubmit="consultarBoleta(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase font-semibold tracking-wider text-gray-400 mb-1.5">Código del Estudiante</label>
+          <input type="text" id="codigo-alumno" placeholder="Ej: GEM-2026-001" required
+            class="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 text-white tracking-widest uppercase text-center font-mono">
+        </div>
+        <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-sm transition cursor-pointer">
+          Ver Libreta de Notas
+        </button>
+      </form>
+
+      <div id="resultado-estudiante" class="mt-4 p-4 rounded-xl border border-white/10 bg-slate-950 hidden"></div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Login Admin -->
+  <div id="modal-admin-auth" style="display: none;" class="modal-backdrop">
+    <div class="bg-slate-900 border border-white/10 rounded-2xl max-w-sm w-full p-6 text-white relative shadow-2xl">
+      <button onclick="closeModal('modal-admin-auth')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕</button>
+
+      <h3 class="text-lg font-bold font-heading text-center mb-4 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-shield-halved text-amber-400"></i> Acceso Administrativo
+      </h3>
+
+      <form onsubmit="authAdmin(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Clave de Seguridad</label>
+          <input type="password" id="admin-pass" placeholder="••••••••" required
+            class="w-full bg-slate-950 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-400 text-white">
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer">
+          Ingresar al Panel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Panel Admin -->
+  <div id="modal-admin-panel" style="display: none;" class="modal-backdrop">
+    <div class="bg-slate-900 border border-white/10 rounded-2xl max-w-xl w-full p-6 text-white relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal('modal-admin-panel')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕</button>
+
+      <h3 class="text-xl font-bold font-heading mb-6 flex items-center gap-2 border-b border-white/10 pb-3">
+        <i class="fa-solid fa-folder-open text-amber-400"></i> Gestión Escolar
+      </h3>
+
+      <div class="space-y-6">
+        <!-- Subir Boleta -->
+        <section class="p-4 bg-slate-950 rounded-xl border border-white/5 space-y-3">
+          <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider">Asignar Boleta a Estudiante</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input type="text" id="admin-doc-codigo" placeholder="Código Alumno (GEM-2026-X)" class="bg-slate-900 border border-white/10 rounded-lg p-2.5 text-xs text-white">
+            <input type="text" id="admin-doc-nombre" placeholder="Nombre Completo Alumno" class="bg-slate-900 border border-white/10 rounded-lg p-2.5 text-xs text-white">
+          </div>
+          <input type="file" id="admin-doc-file" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500/10 file:text-amber-400 hover:file:bg-amber-500/20">
+          <button onclick="guardarBoleta()" class="w-full py-2 bg-amber-500 text-slate-950 font-bold rounded-lg text-xs cursor-pointer">Guardar Boleta</button>
+        </section>
+
+        <!-- Comunicado Flotante -->
+        <section class="p-4 bg-slate-950 rounded-xl border border-white/5 space-y-3">
+          <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider">Emitir Comunicado Flotante</h4>
+          <input type="text" id="admin-comunicado-titulo" placeholder="Título (Ej: Suspensión de clases / Matrícula)" class="w-full bg-slate-900 border border-white/10 rounded-lg p-2.5 text-xs text-white">
+          <textarea id="admin-comunicado-texto" rows="3" placeholder="Detalle del comunicado..." class="w-full bg-slate-900 border border-white/10 rounded-lg p-2.5 text-xs text-white"></textarea>
+          <button onclick="publicarComunicado()" class="w-full py-2 bg-white/10 hover:bg-white/20 border border-white/20 font-bold rounded-lg text-xs cursor-pointer">Publicar en la Web</button>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comunicado Flotante -->
+  <div id="floating-announcement" style="display: none;" class="fixed bottom-6 right-6 z-40 max-w-sm w-full">
+    <div class="bg-slate-900/95 border-l-4 border-amber-500 border-y border-r border-white/10 p-5 rounded-xl shadow-2xl backdrop-blur-xl relative text-white">
+      <button onclick="document.getElementById('floating-announcement').style.display='none'" class="absolute top-3 right-3 text-gray-400 hover:text-white text-sm">✕</button>
+      <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase mb-1.5">
+        <i class="fa-solid fa-bullhorn animate-bounce"></i> Comunicado Oficial
+      </div>
+      <h5 id="popup-title" class="font-bold text-sm mb-1 text-white"></h5>
+      <p id="popup-desc" class="text-xs text-gray-300 leading-relaxed"></p>
+    </div>
+  </div>
+
+  <!-- Scripts de Librerías -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+  <!-- Script Principal -->
+  <script src="main.js"></script>
+</body>
+</html>
